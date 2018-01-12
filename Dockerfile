@@ -21,15 +21,18 @@ RUN set -x \
 COPY iq160_LinuxAMD64.tgz /opt/sybase/work/iq160_LinuxAMD64.tgz
 COPY assets/iq_response.txt /tmp/iq_response.txt
 COPY assets/exec_createdb.sh /tmp/exec_createdb.sh
-COPY assets/create_db.iq.sql /tmp/endpoint.sybase.iq.sh
+COPY assets/create_db.iq.sql /tmp/create_db.iq.sql
+COPY assets/endpoint.sybase.iq.sh /tmp/endpoint.sybase.iq.sh
 
 RUN set -x \
   && chown -R sybase:sybase /opt/sybase \
   && chown -R sybase:sybase /var/sybase \
+  && chmod +x /tmp/exec_createdb.sh \
   && chmod +x /tmp/endpoint.sybase.iq.sh
 
 
 RUN set -x \
+  && yum -y update \
   && yum -y install csh \
   && yum -y install file \
   && yum -y install libaio \
@@ -57,12 +60,8 @@ ENV IQLOGDIR16=/var/sybase/IQ1/
 ENV PATH=$PATH:/opt/sybase/iq16/IQ-16_0/bin64/
 ENV SYBASE=/opt/sybase/iq16/
 
-#RUN set -x \
-#  && start_iq -n IQ1
-
-
-#  && chmod +x /tmp/exec_createdb.sh \
-#  && /tmp/exec_createdb.sh
+RUN set -x \
+  && /tmp/exec_createdb.sh
 
 EXPOSE 2638
 CMD ["/tmp/endpoint.sybase.iq.sh"]

@@ -1,3 +1,5 @@
 # start server and then create a database
-start_iq -n IQ1 \
- && dbisql -c "uid=DBA;pwd=sql;database=utility_db" -d1 -host 127.0.0.1 -onerror exit -nogui /tmp/create_db.iq.sql
+source /opt/sybase/iq16/SYBASE.sh
+export PATH=$PATH:/opt/sybase/iq16/IQ-16_0/bin64/
+cd /var/sybase/IQ1
+start_iq @./params.cfg ./IQ1.db

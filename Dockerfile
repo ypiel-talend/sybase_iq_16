@@ -64,4 +64,5 @@ RUN set -x \
   && /tmp/exec_createdb.sh
 
 EXPOSE 2638
+WORKDIR /var/sybase/IQ1
 CMD ["/tmp/endpoint.sybase.iq.sh"]

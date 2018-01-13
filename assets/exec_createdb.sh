@@ -1,10 +1,18 @@
+#!/bin/bash
+
 # start server and then create a database
 source /opt/sybase/iq16/SYBASE.sh
 export PATH=$PATH:/opt/sybase/iq16/IQ-16_0/bin64/
 
 cd /var/sybase/IQ1
 
-start_iq -n IQ1
+function error {
+	echo "* ERROR :" $1
+	exit 1
+}
+
+
+start_iq -n IQ1 || error "Can't first start IQ server."
 
 echo "* CREATE DB"
 cat > /tmp/create_db.sql << EOF_createdb
@@ -21,13 +29,13 @@ temporary reserve 512
 dba user 'tuj'
 dba password 'tuj'
 EOF_createdb
-dbisql -c "uid=DBA;pwd=sql;database=utility_db" -d1 -host 127.0.0.1 -onerror exit -nogui /tmp/create_db.sql 
+dbisql -c "uid=DBA;pwd=sql;database=utility_db" -d1 -host 127.0.0.1 -onerror exit -nogui /tmp/create_db.sql || error "Can't create IQ1 database."
 
 echo "* STOP ENGINE"
 cat > /tmp/stop_engine.sql << EOF_stop
 stop engine
 EOF_stop
-dbisql -c "uid=DBA;pwd=sql;database=utility_db" -d1 -host 127.0.0.1 -onerror exit -nogui /tmp/stop_engine.sql
+dbisql -c "uid=DBA;pwd=sql;database=utility_db" -d1 -host 127.0.0.1 -onerror exit -nogui /tmp/stop_engine.sql || error "Can't stop IQ server."
 
 echo "* GEN PARAMS"
 cat > /var/sybase/IQ1/params.cfg << EOF_params
@@ -37,7 +45,7 @@ cat > /var/sybase/IQ1/params.cfg << EOF_params
 EOF_params
 
 cd /var/sybase/IQ1
-start_iq @./params.cfg ./IQ1.db
+start_iq @./params.cfg ./IQ1.db || error "Can't start server IQ1 wit params."
 
 echo "* CONFIGURE DB"
 cat > /tmp/dbspace.sql << EOF_dbspace
@@ -47,7 +55,7 @@ size 512 MB
 reserve 512 MB
 iq store;
 EOF_dbspace
-dbisql -c "uid=tuj;pwd=tuj;database=IQ1" -d1 -host 127.0.0.1 -onerror exit -nogui /tmp/dbspace.sql
+dbisql -c "uid=tuj;pwd=tuj;database=IQ1" -d1 -host 127.0.0.1 -onerror exit -nogui /tmp/dbspace.sql || error "Can't configure IQ1 database."
 
 echo "* CREATE USER"
 cat > /tmp/createuser.sql << EOF_createuser
@@ -57,4 +65,4 @@ grant READCLIENTFILE to tujuser
 set option tujuser.allow_read_client_file=on;
 commit
 EOF_createuser
-dbisql -c "uid=tuj;pwd=tuj;database=IQ1" -d1 -host 127.0.0.1 -onerror exit -nogui /tmp/createuser.sql
+dbisql -c "uid=tuj;pwd=tuj;database=IQ1" -d1 -host 127.0.0.1 -onerror exit -nogui /tmp/createuser.sql || error "Can't create tujuser user."

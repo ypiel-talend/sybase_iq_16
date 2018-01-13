@@ -21,7 +21,6 @@ RUN set -x \
 COPY iq160_LinuxAMD64.tgz /opt/sybase/work/iq160_LinuxAMD64.tgz
 COPY assets/iq_response.txt /tmp/iq_response.txt
 COPY assets/exec_createdb.sh /tmp/exec_createdb.sh
-COPY assets/create_db.iq.sql /tmp/create_db.iq.sql
 COPY assets/endpoint.sybase.iq.sh /tmp/endpoint.sybase.iq.sh
 
 RUN set -x \

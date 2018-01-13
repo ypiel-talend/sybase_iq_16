@@ -14,10 +14,15 @@ The exposed port is the ``2638``. You can connect to the ``iQ1`` database within
 You can also connect with the dba account, login ``DBA``, password ``sql``, and use the ``utility_db`` database.
 
 ## Execute dbisql from the container
-The following command connect you into the docker image with X application enabled : 
+The following command run the image with X11 enabled : 
 ```bash
-docker run -it -e DISPLAY -v /tmp/.X11-unix/:/tmp/.X11-unix/ sybaseiq /bin/bash
+docker run  -e DISPLAY -v /tmp/.X11-unix/:/tmp/.X11-unix/ -p 2638:2638 sybaseiq
 ```
+Retrieve the id of the running image with ``docker ps``. Then connect into the container executing a bash inside with:
+```bash
+docker exec -it <container id> /bin/bash
+```
+
 You are then connected as root into the container. You can execute ``dbisql`` command.
 
 ## About the image

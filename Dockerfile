@@ -1,9 +1,4 @@
 # Dockerfile for Sybase IQ 16.0 30 days evaluation
-# Install process based on 
-# HTTP port : 4282
-# HTTPS port : 4283
-# RMI port : 4992
-# TDS port : 4998
 # Starting port : 2638 (exposed)
 FROM centos:7
 

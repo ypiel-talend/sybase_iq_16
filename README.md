@@ -3,9 +3,8 @@
 The Dockerfile builds a SAP/Sybase iq 16 with 30 days evaluation license.
 
 ## Usage
-- First you have to download the IQ installer _iq160_LinuxAMD64.tgz_ from https://www.sap.com/community/topic/iq.html
+- The installer download url can be get from : https://www.sap.com/community/topic/iq.html
 - Clone the project : ``git clone https://github.com/ypiel-talend/sybase_iq_16``
-- Copy the installer file _iq160_LinuxAMD64.tgz_ near the Dockerfile
 - Build the image : ``docker build -t sybaseiq .``
 - Run the container : ``docker run -p 2638:2638 sybaseiq``
 

@@ -13,7 +13,11 @@ RUN set -x \
   && groupadd sybase \
   && useradd -g sybase -d /opt/sybase sybase
 
-COPY iq160_LinuxAMD64.tgz /opt/sybase/work/iq160_LinuxAMD64.tgz
+#COPY iq160_LinuxAMD64.tgz /opt/sybase/work/iq160_LinuxAMD64.tgz
+RUN set -x \
+  && cd /opt/sybase/work/ \
+  && curl -O http://d14alp1cwvo3z3.cloudfront.net/16.0/Eval/iq160_LinuxAMD64.tgz
+
 COPY assets/iq_response.txt /tmp/iq_response.txt
 COPY assets/exec_createdb.sh /tmp/exec_createdb.sh
 COPY assets/endpoint.sybase.iq.sh /tmp/endpoint.sybase.iq.sh
